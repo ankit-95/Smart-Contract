@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Freelancing Contract</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<script src="web3.js/dist/web3.min.js"></script>
+<script src="node_modules/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript">
+
+    var contract_address = "0x270b8e38E268ed4D1663423132769AA92d8bfD0B";
+    var contract_abi =[ { "constant": true, "inputs": [], "name": "getDeveloperDetails", "outputs": [ { "name": "", "type": "string", "value": "" }, { "name": "", "type": "string", "value": "" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getCompany", "outputs": [ { "name": "", "type": "address", "value": "0x0000000000000000000000000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "t", "type": "address" } ], "name": "setDevloper", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "getCompanyDetails", "outputs": [ { "name": "", "type": "string", "value": "" }, { "name": "", "type": "string", "value": "" }, { "name": "", "type": "string", "value": "" }, { "name": "", "type": "string", "value": "" }, { "name": "", "type": "uint256", "value": "0" }, { "name": "", "type": "uint256", "value": "0" }, { "name": "", "type": "uint256", "value": "0" }, { "name": "", "type": "uint256", "value": "0" }, { "name": "", "type": "uint256", "value": "0" }, { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getModule", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getTime", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getDeveloper", "outputs": [ { "name": "", "type": "address", "value": "0x0000000000000000000000000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "cname1", "type": "string" }, { "name": "company_address1", "type": "string" }, { "name": "name_of_project1", "type": "string" }, { "name": "description1", "type": "string" }, { "name": "development_time1", "type": "uint256" }, { "name": "cost12", "type": "uint256" }, { "name": "id1", "type": "uint256" }, { "name": "id2", "type": "uint256" }, { "name": "cost1", "type": "uint256" }, { "name": "cost2", "type": "uint256" } ], "name": "setCompanyDetails", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "transfer", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "developer_name1", "type": "string" }, { "name": "developer_address1", "type": "string" } ], "name": "setDevloperDetails", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "t", "type": "address" } ], "name": "setCompany", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "a", "type": "uint256" } ], "name": "setModule", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "payable": true, "stateMutability": "payable", "type": "fallback" } ];
+   
+    if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+    } else {
+        // set the provider you want from Web3.providers    
+        web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
+    }
+
+    var contract_instance = web3.eth.contract(contract_abi).at(contract_address);
+
+    var b1 = new Boolean(false);
+    var time;
+    var s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s12,s11;
+
+    function companyProcess() {
+
+         s1 = document.getElementById("name").value.toString();
+         s2 = document.getElementById("address").value.toString();
+         s3 = document.getElementById("pname").value.toString();
+         s4 = document.getElementById("description").value.toString();
+         s5 = document.getElementById("time").value;
+         s6 = document.getElementById("amount").value;
+        
+         s7 = document.getElementById("textl11").value;
+         s8 = document.getElementById("textl21").value;
+         s9 = document.getElementById("textl12").value;
+         s10 = document.getElementById("textl22").value;
+     
+        web3.personal.unlockAccount(web3.eth.accounts[0],"test1234");
+        contract_instance.setCompanyDetails(s1,s2,s3,s4,parseInt(s5),parseInt(s6),parseInt(s7),parseInt(s8),parseInt(s9),parseInt(s10),{from:web3.eth.accounts[0],gas:200000},function (error,result)
+        {
+            if(error)
+            {
+                console.error(error);
+            }
+            else
+            {
+                var txHash = result;
+                console.log(txHash);
+            }
+            });
+        time = parseInt(s4);
+
+    }
+
+    function developerProcess() {
+
+        s11 = document.getElementById("name1").value.toString();
+        s12 = document.getElementById("amount1").value.toString();
+        web3.personal.unlockAccount(web3.eth.accounts[1],"test1234");
+        contract_instance.setDevloperDetails(s11,s12,{from:web3.eth.accounts[1],gas:220000},function (error,result)
+        {
+            if(error)
+            {
+                console.error(error);
+            }
+            else
+            {
+                var txHash = result;
+                console.log(txHash);
+            }
+        });
+    }
+
+    function getCompanyAddress() {
+        document.getElementById("getCom").innerText = (web3.eth.accounts[0]).toString();
+        web3.personal.unlockAccount(web3.eth.accounts[0],"test1234");
+        contract_instance.setCompany(web3.eth.accounts[0],{from:web3.eth.accounts[0],gas:200000},function (error,result)
+        {
+            if(error)
+            {
+                console.error(error);
+            }
+            else
+            {
+                var txHash = result;
+                console.log(txHash);
+            }
+        });
+    }
+        function getDeveloperAddress() {
+        document.getElementById("getDev").innerText = (web3.eth.accounts[1]).toString();
+            web3.personal.unlockAccount(web3.eth.accounts[1],"test1234");
+            contract_instance.setDevloper(web3.eth.accounts[1],{from:web3.eth.accounts[1],gas:220000},function (error,result)
+            {
+                if(error)
+                {
+                    console.error(error);
+                }
+                else
+                {
+                    var txHash = result;
+                    console.log(txHash);
+                }
+            });
+
+        }
+       
+       function moduleCheck()
+       {
+
+        if(b1==true)
+        {
+            console.log("success"); 
+            swal("Contract Completed!", "Emi's Paid Successfully", "success");
+            contract_instance.transfer({from:web3.eth.accounts[0],gas:220000},function (error,result)
+            {
+                if(error)
+                {
+                    console.error(error);
+                }
+                else
+                {
+                    var txHash = result;
+                    console.log(txHash);
+                }
+            });
+        }
+            else
+            {
+                console.log("Breech");            
+                swal("Contract Breached!", "Not Paid Successfully", "error");
+            }
+
+       }
+ </script>
+
+<style type="text/css">
+    table
+    {
+        table-layout: fixed;
+    }
+</style>
+<body class="container">
+<h1 class="jumbotron">Freelancing Contract</h1>
+<div class="table-responsive">
+  <table class="table" border="2" width="100%">
+    <th> Party A <hr><br> Company Address : <button class="btn btn-primary" onclick="getCompanyAddress()">Get Address</button>
+        <span id="getCom"></span>
+    </th>
+    <th> Party B <hr><br> Developer Address : <button class="btn btn-primary" onclick="getDeveloperAddress()">Get Address</button>
+        <span id="getDev"></span>
+    </th>
+    <tr>
+    <td>
+<form action="javascript:companyProcess()">
+       <label>Name of the Company</label>
+        <input type="text" class="form-control" id="name" /><br>
+
+
+         <label>Address</label>
+        <input type="text" class="form-control" id="address" /><br>
+
+
+
+         <label>Name of the Project</label>
+        <input type="text" class="form-control" id="pname" /><br>
+
+         <label>Description of Project</label>
+         <input type="text" class="form-control" id="description" /><br>
+
+        <label>Development Time</label>
+            <input type="number" class="form-control" id="time" /><br>
+
+
+            <label>Project Cost</label>
+            <input type="number" class="form-control" id="amount" /><br>
+            <br><br>
+            <label>Module To be Done</label>
+              <div class="table-responsive">
+                <table class="table">
+                <thead>
+                    <th>
+                        id
+                    </th>
+                    <th>
+                        cost in rs
+                    </th>
+                </thead>
+                    <tr>
+                    <td> <input type="number" id="textl11"></td>
+                    <td><input type="number" id="textl12"></td>
+                    </tr>
+                    <tr>
+                    <td><input type="number" id="textl21"></td>
+                    <td><input type="number" id="textl22"></td>
+                    </tr>
+                            </table>
+            </div>
+                <br>
+                <br>
+                <input type="submit" class="btn btn-primary" value="Submit"/>
+                <hr>
+</form>
+<span id="data"></span>
+    </td>
+        <td>
+            <form action="javascript:developerProcess()">
+            <label>Name of the Developer</label>
+            <input type="text" id="name1" class="form-control"/><br>
+
+            <label>Address</label>
+            <textarea id="amount1" class="form-control" /></textarea><br>
+                <input type="submit" class="btn btn-primary" value="Submit"/>
+                <br><br>
+            </form>
+
+            <form action="javascript:moduleCheck()">
+            <label>Module Completed</label>
+            <div class="table-responsive">
+                <table class="table">
+                <thead>
+                    <th>
+                        id
+                    </th>
+                   </thead>
+                    <tr>
+                    <td> <input type="number" id="textr11"></td>
+                    </tr>
+                            </table>
+            </div>
+                  <br>
+                <input type="submit" class="btn btn-primary" value="Module Submit"/>
+                <br>
+
+            </form>
+        </td>
+
+    </tr>
+</table>
+</div>
+
+<h3>Transaction Details</h3>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+            <tbody>
+            <tr>
+                <td>123</td>
+                <td>First Detail</td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EMI</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<script src="web3.js/dist/web3.min.js"></script>
+<script type="text/javascript">
+
+    var contract_address = "0x618dE0abbCEDaB54879b57249dB5d5b25Ead0344";
+    var contract_abi =[ { "constant": true, "inputs": [], "name": "getBorrower", "outputs": [ { "name": "", "type": "address", "value": "0x0000000000000000000000000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "name", "type": "string" }, { "name": "value", "type": "uint256" } ], "name": "setLenderDetails", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "t", "type": "address" } ], "name": "setLender", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "transfer", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "getLenderDetails", "outputs": [ { "name": "", "type": "string", "value": "" }, { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getLender", "outputs": [ { "name": "", "type": "address", "value": "0x0000000000000000000000000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getBorrowerDetails", "outputs": [ { "name": "", "type": "string", "value": "" }, { "name": "", "type": "uint256", "value": "0" }, { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "t", "type": "address" } ], "name": "setBorrower", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "name", "type": "string" }, { "name": "value", "type": "uint256" }, { "name": "noofemi", "type": "uint256" } ], "name": "setBorrowerDetails", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "payable": true, "stateMutability": "payable", "type": "fallback" } ]
+    if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+    } else {
+        // set the provider you want from Web3.providers
+        web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
+    }
+
+    var contract_instance = web3.eth.contract(contract_abi).at(contract_address);
+
+    function lenderProcess() {
+
+        var s1 = document.getElementById("name").value.toString();
+        var s2 = document.getElementById("amount").value;
+        web3.personal.unlockAccount(web3.eth.accounts[0],"test1234");
+        contract_instance.setLenderDetails(s1,parseInt(s2),{from:web3.eth.accounts[0],gas:200000},function (error,result)
+        {
+            if(error)
+            {
+                console.error(error);
+            }
+            else
+            {
+                var txHash = result;
+                console.log(txHash);
+            }
+            });
+    }
+
+    function borrowerProcess() {
+
+        var s1 = document.getElementById("name1").value.toString();
+        var s2 = document.getElementById("amount1").value;
+        var s3 = document.getElementById("emi").value;
+        web3.personal.unlockAccount(web3.eth.accounts[1],"test1234");
+        contract_instance.setBorrowerDetails(s1,parseInt(s2),parseInt(s3),{from:web3.eth.accounts[1],gas:200000},function (error,result)
+        {
+            if(error)
+            {
+                console.error(error);
+            }
+            else
+            {
+                var txHash = result;
+                console.log(txHash);
+            }
+        });
+    }
+
+    function getLenderDeatils()
+    {
+        document.getElementById("GetLenDet").innerText = contract_instance.getLenderDetails().toString();
+        document.getElementById("GetLender").innerText = contract_instance.getLender().toString();
+
+    }
+    function getBorrowerDeatils()
+    {
+
+        document.getElementById("GetBowDet").innerText = contract_instance.getBorrowerDetails().toString();
+        document.getElementById("GetBorrower").innerText = contract_instance.getBorrower().toString();
+    }
+
+    function getLenderAddress() {
+        document.getElementById("getLen").innerText = (web3.eth.accounts[0]).toString();
+        web3.personal.unlockAccount(web3.eth.accounts[0],"test1234");
+        contract_instance.setLender(web3.eth.accounts[0],{from:web3.eth.accounts[0],gas:200000},function (error,result)
+        {
+            if(error)
+            {
+                console.error(error);
+            }
+            else
+            {
+                var txHash = result;
+                console.log(txHash);
+            }
+        });
+    }
+        function getBorrowerAddress() {
+        document.getElementById("getBow").innerText = (web3.eth.accounts[1]).toString();
+            web3.personal.unlockAccount(web3.eth.accounts[1],"test1234");
+            contract_instance.setBorrower(web3.eth.accounts[1],{from:web3.eth.accounts[1],gas:220000},function (error,result)
+            {
+                if(error)
+                {
+                    console.error(error);
+                }
+                else
+                {
+                    var txHash = result;
+                    console.log(txHash);
+                }
+            });
+
+        }
+        function transfer() {
+
+        contract_instance.transfer({from:web3.eth.accounts[0],gas:300000},function (error,result)
+        {
+            if(error)
+            {
+                console.error(error);
+            }
+            else
+            {
+                var txHash = result;
+                console.log(txHash);
+            }
+        });
+        }
+ </script>
+<body class="container">
+<h1 class="jumbotron">EMI Contract</h1>
+<div class="table-responsive">
+  <table class="table" border="2" width="100%">
+    <th> Party A <hr><br> Lender Address : <button class="btn btn-primary" onclick="getLenderAddress()">Get Address</button>
+        <span id="getLen"></span>
+    </th>
+    <th> Party B <hr><br> Borrower Address : <button class="btn btn-primary" onclick="getBorrowerAddress()">Get Address</button>
+        <span id="getBow"></span>
+    </th>
+    <tr>
+    <td>
+<form action="javascript:lenderProcess()">
+       <label>Name</label>
+        <input type="text" class="form-control" id="name" /><br>
+            <label>Amount that can be Lended</label>
+            <input type="number" class="form-control" id="amount" /><br>
+            <br><br>
+    <input type="submit" class="btn btn-primary" value="Submit"/>
+    <hr>
+</form>
+<button class="btn btn-primary" onclick="getLenderDeatils()">GetDetails</button>
+        <span id ="GetLenDet"></span>
+        <span id="GetLender"></span>
+    </td>
+        <td>
+            <form action="javascript:borrowerProcess()">
+            <label>Name</label>
+            <input type="text" id="name1" class="form-control"/><br>
+
+            <label>Amount that you want to Borrow </label>
+            <input type="number" id="amount1" class="form-control" /><br>
+
+                <label>Enter the number of EMI</label>
+                <input type="number" class="form-control" id="emi" /><br>
+
+                <input type="submit" class="btn btn-primary" value="Submit"/>
+                <hr>
+
+            </form>
+            <button class="btn btn-primary" onclick="getBorrowerDeatils()">GetBorrower</button>
+            <span id ="GetBowDet"></span>
+            <span id ="GetBorrower"></span>
+            <button class="btn btn-success" onclick="transfer()">Pay the Emi</button>
+        </td>
+
+    </tr>
+</table>
+</div>
+
+<h3>Transaction Details</h3>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>123</td>
+                <td>First Detail</td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

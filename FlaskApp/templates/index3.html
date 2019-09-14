@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Freelancing Contract</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script>
+    function show() {
+        console.log("hi this is mohit")
+       swal("Contract Filled Successfully!", "Work Will Start", "success");
+    }
+    function getCompanyAddress() {
+       
+                var txHash = result;
+                console.log(txHash);
+                document.getElementById("getCom").innerText = txHash.toString();
+            
+        });
+    function getDeveloperAddress() {
+       
+                var txHash = result;
+                console.log(txHash);
+                document.getElementById("getDev").innerText = txHash.toString();
+            
+        });
+    </script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<body class="container">
+<h1 class="jumbotron">Freelancing Contract</h1>
+<div class="table-responsive">
+  <table class="table" border="2" width="100%">
+    <th> Party A <hr><br> Company Address : <button class="btn btn-primary" onclick="getCompanyAddress()">Get Address</button>
+        <span id="getCom"></span>
+    </th>
+    <th> Party B <hr><br> Developer Address : <button class="btn btn-primary" onclick="getDeveloperAddress()">Get Address</button>
+        <span id="getDev"></span>
+    </th>
+    <tr>
+    <td>
+<form method=POST>
+           {{form.cname.label}}
+           <br>
+           {{form.cname}}
+           <br>
+           {{form.address.label}}<br>
+           {{form.address}}
+               <br>
+                {{form.pname.label}}<br>
+           {{form.pname}}
+           <br>
+            {{form.description.label}}<br>
+           {{form.description}}
+           <br>
+            <br>
+            {{form.development_time.label}}<br>
+           {{form.development_time}}
+           <br>
+
+            {{form.pcost.label}}<br>
+           {{form.pcost}}
+           <br><br>
+            <label>Module To be Done</label>
+              <div class="table-responsive">
+                <table class="table">
+                <thead>
+                    <th>
+                        id
+                    </th>
+                    <th>
+                        cost in rs
+                    </th>
+                </thead>
+                    <tr>
+                    <td>{{form.id1}}
+                    <td>{{form.c1}}
+                    </tr>
+                    <tr>
+                    <td>{{form.id2}}
+                    <td>{{form.c2}}
+                    </tr>
+                            </table>
+            </div>
+                <br>
+                <br>
+               
+                <hr>
+</form>
+<span id="data"></span>
+    </td>
+        <td>
+            <form action="javascript:developerProcess()">
+          {{form.dname.label}}<br>
+          {{form.dname}}
+               <br>
+                 {{form.daddress.label}}<br>
+          {{form.daddress}}
+               <br>
+              
+            </form>
+
+            <form action="javascript:moduleCheck()">
+                   <br><br><br><br><br><hr>
+            <label>Module Completed</label>
+            <div class="table-responsive">
+                <table class="table">
+                <thead>
+                    <th>
+                        id
+                    </th>
+                   </thead>
+                    <tr>
+                    <td> <input type="number" id="textr11"></td>
+                    </tr>
+                            </table>
+
+            </div>
+
+               
+                <input type="submit" class="btn btn-primary" value="Module Submit"/>
+                <br>
+
+            </form>
+        </td>
+
+    </tr>
+</table>
+</div>
+ <input type="submit" class="btn btn-primary" onclick="show()" value="Submit"/>
+
+<h3>Transaction Details</h3>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+            <tbody>
+            <tr>
+                <td>123</td>
+                <td>First Detail</td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

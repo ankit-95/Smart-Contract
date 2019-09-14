@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>
+		Supplier&Retailer
+	</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<script src="web3.js/dist/web3.min.js"></script>
+<script type="text/javascript">
+	var contract_address="0x79addd7F0E09bCB14Dc9382e2176B9bFccEE774C";
+	var contract_abi=[ { "constant": true, "inputs": [], "name": "checkDelievery", "outputs": [ { "name": "", "type": "string", "value": "Yes" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "t", "type": "address" } ], "name": "setSupplier", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "returnSupplier", "outputs": [ { "name": "", "type": "address", "value": "0x0000000000000000000000000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "t", "type": "address" } ], "name": "setRetailer", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "pick", "type": "string" }, { "name": "drop", "type": "string" }, { "name": "comm", "type": "string" }, { "name": "nou", "type": "uint256" }, { "name": "curr_time", "type": "string" }, { "name": "curr_date", "type": "string" } ], "name": "placeOrder", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "curr_date", "type": "string" }, { "name": "curr_time", "type": "string" }, { "name": "loc", "type": "string" } ], "name": "updateOrder", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "orderDetails", "outputs": [ { "name": "", "type": "string", "value": "" }, { "name": "", "type": "string", "value": "" }, { "name": "", "type": "string", "value": "" }, { "name": "", "type": "string", "value": "" }, { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "returnRetailer", "outputs": [ { "name": "", "type": "address", "value": "0x0000000000000000000000000000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "payable": true, "stateMutability": "payable", "type": "fallback" } ];
+	if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+    } else {
+        // set the provider you want from Web3.providers
+        web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
+    }
+var contract_instance=web3.eth.contract(contract_abi).at(contract_address);
+function getSupplierAddress()
+{
+document.getElementById("getSupp").innerText=(web3.eth.accounts[0]).toString();
+web3.personal.unlockAccount(web3.eth.accounts[0],"test1234");
+contract_instance.setSupplier(web3.eth.accounts[0],{from:web3.eth.accounts[0]},function(error,result){
+	if(error)
+	{
+		console.error(error);
+	}
+	else
+	{
+		var txHash=result;
+		console.log(txHash);
+	}
+});
+}
+function getRetailerAddress()
+{
+document.getElementById("getRet").innerText=(web3.eth.accounts[1]).toString();
+web3.personal.unlockAccount(web3.eth.accounts[1],"test1234");
+contract_instance.setRetailer(web3.eth.accounts[1],{from:web3.eth.accounts[1]},function(error,result){
+	if(error)
+	{
+		console.error(error);
+	}
+	else
+	{
+		var txHash=result;
+		console.log(txHash);
+	}
+});
+}
+function placeOrder()
+{var now=new Date();
+var s1=document.getElementById("pick_loc").value.toString();
+var s2=document.getElementById("drop_loc").value.toString();
+var s3=document.getElementById("comm_type").value.toString();
+var s4=document.getElementById("no_of_units").value;
+var s5=now.toLocaleTimeString();
+var s6=now.toLocaleDateString();
+web3.personal.unlockAccount(web3.eth.accounts[0],"test1234");
+contract_instance.placeOrder(s1,s2,s3,parseInt(s4),s5,s6,{from:web3.eth.accounts[0],gas:200000},function(error,result){
+	if(error)
+	{
+		console.error(error);
+	}
+	else
+	{
+		var txHash=result;
+		console.log(txHash);
+
+	}
+});
+}
+function getOrderInfo()
+{
+var s=contract_instance.orderDetails();
+document.getElementById("currDate").innerText=s[0];
+document.getElementById("currTime").innerText=s[1];
+document.getElementById("currLoc").innerText=s[2];
+document.getElementById("commType").innerText=s[3];
+document.getElementById("noOfUnits").innerText=s[4];
+}
+function updateLocation()
+{
+var now=new Date();
+var loc=document.getElementById("curr_loc").value.toString();
+web3.personal.unlockAccount(web3.eth.accounts[0],"test1234");
+contract_instance.updateOrder(now.toLocaleDateString(),now.toLocaleTimeString(),loc,{from:web3.eth.accounts[0],gas:220000},function(error,result){
+	if(error)
+	{
+		console.error(error);
+
+	}
+	else
+	{
+		var txHash=result;
+		console.log(txHash);
+	    
+	}
+})
+
+if(contract_instance.checkDelievery()=="Yes")
+{   getOrderInfo();
+	document.getElementById("success_msg").style.color="green";
+	document.getElementById("success_msg").innerText="Order successfully delievered !!!!";
+}
+}
+function check()
+{
+	if(document.getElementById("pick_loc").value == document.getElementById("drop_loc").value)
+	{
+		document.getElementById("message").style.color="red";
+		document.getElementById("message").innerText="PickUp Location and Drop Location can't be same !!!!";
+	}
+}
+</script>
+<body >
+<div class="container">
+<div class="row">
+<div class="col-md-6">
+<b>Supplier</b><br>Supplier Address : <button class="btn btn-primary" onclick="getSupplierAddress()">Get Address</button>
+<span id="getSupp"></span>
+</div>
+<div class="col-md-6">
+<b>Retailer</b><br>Retailer Address : <button class="btn btn-primary" onclick="getRetailerAddress()">Get Address</button>
+<span id="getRet"></span>
+</div >
+</div>
+<div class="row">
+<div class="col-md-6">
+<form action="javascript:placeOrder()">
+<label>PickUp Location</label>
+<input type="text" class="form-control" id="pick_loc" onkeyup="check()" /><br>
+<label>Drop Location</label>
+<input type="text" class="form-control" id="drop_loc" onkeyup="check()" /><br>
+<span id="message"></span>
+<label>Commodity Type</label>
+<input type="text" class="form-control" id="comm_type"/><br>
+<label>No of Units</label>
+<input type="number" class="form-control" id="no_of_units"/><br><br><br>
+<input type="submit" class="btn btn-primary" value="Submit"/><hr>  
+</form>
+</div>
+<div class="col-md-6">
+<br><br>
+<button class="btn btn-primary" onclick="getOrderInfo()">Get Order Details</button><br>
+<br><br>
+<div class="row">
+<div class="col-md-6">Date :-</div>
+<div class="col-md-6"><span id="currDate"></span></div>
+</div>
+<br><br>
+<div class="row">
+<div class="col-md-6">Time :-</div>
+<div class="col-md-6"><span id="currTime"></span></div>
+</div>
+<br><br>
+<div class="row">
+<div class="col-md-6">Last Updated Loaction :-</div>
+<div class="col-md-6"><span id="currLoc"></span></div>
+</div>
+<br><br>
+<div class="row">
+<div class="col-md-6">Number Of Units :-</div>
+<div class="col-md-6"><span id="noOfUnits"></span></div>
+</div>
+<br><br>
+<div class="row">
+<div class="col-md-6">Commodity Type :-</div>
+<div class="col-md-6"><span id="commType"></span></div>
+</div>
+<br><br><br>
+<div class="row">
+<div class="col-md-12">
+<span id="success_msg"></span>
+</div>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<form action="javascript:updateLocation()" >
+<label>Current Location</label>
+<input type="text" class="form-control" id="curr_loc"/><br><br><br>
+<input type="submit" class="btn btn-primary" value="Update"/><hr>
+</form>
+</div>
+</div>
+</div>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
